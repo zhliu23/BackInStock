@@ -8,12 +8,14 @@ public class Item {
 
     private String url;
     private String title;
+    private double price;
     private boolean inStock;
     private boolean checked;
 
-    public Item(String url, String title, boolean inStock) {
+    public Item(String url, String title, double price, boolean inStock) {
         this.url = url;
         this.title = title;
+        this.price = price;
         this.inStock = inStock;
         this.checked = false;
     }
@@ -26,9 +28,11 @@ public class Item {
         return title;
     }
 
-    public boolean isInStock() {
-        return inStock;
-    }
+    public double getPrice() { return price; }
+
+    public void setPrice(int price) { this.price = price; }
+
+    public boolean isInStock() { return inStock; }
 
     public boolean getChecked() {
         return checked;
