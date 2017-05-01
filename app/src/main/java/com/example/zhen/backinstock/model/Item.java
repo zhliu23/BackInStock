@@ -7,38 +7,34 @@ package com.example.zhen.backinstock.model;
 public class Item {
 
     private String url;
-    private String title;
+    private String name;
     private double price;
-    private boolean inStock;
-    private boolean checked;
+    private boolean stock;
+    private boolean selected;
 
-    public Item(String url, String title, double price, boolean inStock) {
+    public Item(){}
+    public Item(String url, String name, double price, boolean stock) {
         this.url = url;
-        this.title = title;
+        this.name = name;
         this.price = price;
-        this.inStock = inStock;
-        this.checked = false;
+        this.stock = stock;
+        this.selected = false;
     }
 
+    //Getters
     public String getUrl() {
         return url;
     }
-
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
-
     public double getPrice() { return price; }
-
-    public void setPrice(int price) { this.price = price; }
-
-    public boolean isInStock() { return inStock; }
-
-    public boolean getChecked() {
-        return checked;
-    }
-
-    public void setChecked(boolean checked) {
-        this.checked = checked;
-    }
+    public boolean getStock() { return stock; }
+    public boolean getSelected() { return selected; }
+    //Setters
+    public void setUrl(String url) { this.url = url; }
+    public void setName(String name) { this.name = name; }
+    public void setPrice(double price) { this.price = price; }
+    public void setStock(boolean inStock) { this.stock = inStock; }
+    public void setSelected(boolean selected) { this.selected = selected; }
 }

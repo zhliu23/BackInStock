@@ -6,11 +6,11 @@
         <!--android:title="Setting"-->
         <!--app:showAsAction="never" />-->
 
-    <item
-        android:id="@+id/action_search"
-        android:title="Search"
-        android:icon="@drawable/ic_search"
-        app:showAsAction="always" />
+    <!--<item-->
+        <!--android:id="@+id/action_search"-->
+        <!--android:title="Search"-->
+        <!--android:icon="@drawable/ic_search"-->
+        <!--app:showAsAction="always" />-->
 
     <item
         android:id="@+id/action_refresh"
