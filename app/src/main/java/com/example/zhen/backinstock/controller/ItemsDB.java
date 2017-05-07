@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.example.zhen.backinstock.model.Item;
 
@@ -33,7 +34,7 @@ public class ItemsDB extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_ITEMS_TABLE = "CREATE TABLE " + TABLE_ITEMS + "("
-                + KEY_URL + " TEXT"
+                + KEY_URL + " TEXT UNIQUE"
                 + ")";
         db.execSQL(CREATE_ITEMS_TABLE);
     }
@@ -50,14 +51,35 @@ public class ItemsDB extends SQLiteOpenHelper {
      * Adds a new item into the database
      * @param item - an item object that stores the url, name, price, and stock status
      */
-    public void addItem(Item item) {
+    public boolean addItem(Item item) {
         SQLiteDatabase db = this.getWritableDatabase();
 
+        Cursor cursor = db.query(TABLE_ITEMS, new String[] { KEY_URL }, KEY_URL + " = ?",
+                new String[] {item.getUrl()}, null, null, null, null);
+
+        boolean inserted = false;
+        if(cursor.getCount() == 0) {
+            ContentValues values = new ContentValues();
+            values.put(KEY_URL, item.getUrl());
+
+            db.insert(TABLE_ITEMS, null, values);
+            inserted = true;
+        }
+        db.close();
+        return inserted;
+    }
+
+    /**
+     * Updates the information of the passed item
+     * @param item
+     */
+    public int updateItem(Item item) {
+        Log.e("ItemDB", "Updating " + item.getName());
+        SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KEY_URL, item.getUrl());
-
-        db.insert(TABLE_ITEMS, null, values);
-        db.close();
+        return db.update(TABLE_ITEMS, values, KEY_URL + " = ?", new String[] {item.getUrl()});
+        //db.close();
     }
 
     /**
@@ -96,14 +118,5 @@ public class ItemsDB extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("delete from "+ TABLE_ITEMS);
         db.close();
-    }
-
-    public int getItemsCount() {
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        String selectQuery = "SELECT * FROM " + TABLE_ITEMS;
-        Cursor cursor = db.rawQuery(selectQuery, null);
-
-        return cursor.getCount();
     }
 }

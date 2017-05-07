@@ -1,13 +1,16 @@
 package com.example.zhen.backinstock.controller;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -27,45 +30,68 @@ public class ItemArrayAdapter extends ArrayAdapter<Item> {
     private Context context;
     private int layoutResource;
     private List<Item> itemList;
-    private boolean invis_checkbox;
+    private ItemsDB itemsDB;
 
-    public ItemArrayAdapter(Context context, int resource, List<Item> itemList) {
+    public ItemArrayAdapter(Context context, int resource, List<Item> itemList, ItemsDB itemsDB) {
         super(context, resource, itemList);
         this.context = context;
         this.layoutResource = resource;
         this.itemList = itemList;
-        this.invis_checkbox = true;
+        this.itemsDB = itemsDB;
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = ((Activity)context).getLayoutInflater();
         View view = inflater.inflate(R.layout.listview_item, parent, false);
+
+        view.setLongClickable(true);
+        view.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                AlertDialog.Builder confirmDialog = new AlertDialog.Builder(context);
+                confirmDialog.setTitle("Confirm Deletion");
+
+                final TextView msgTextView = new TextView(context);
+                msgTextView.setText("Are you sure?");
+                msgTextView.setGravity(Gravity.CENTER);
+                msgTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+
+
+                confirmDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        itemsDB.deleteItem(itemList.get(position));
+                        itemList.remove(position);
+                        notifyDataSetChanged();
+                    }
+                });
+                confirmDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                confirmDialog.setView(msgTextView);
+                confirmDialog.show();
+                return false;
+            }
+        });
 
         TextView nameText = (TextView) view.findViewById(R.id.nameText);
         TextView priceText = (TextView) view.findViewById(R.id.priceText);
         TextView statusText = (TextView) view.findViewById(R.id.statusText);
 
-        ImageView imageView = (ImageView) view.findViewById(R.id.itemImage);
-        CheckBox checkBox = (CheckBox) view.findViewById(R.id.checkBox);
+        //ImageView imageView = (ImageView) view.findViewById(R.id.itemImage);
 
         Item item = itemList.get(position);
 
-        if(invis_checkbox)
-            checkBox.setVisibility(View.GONE);
-        else
-            checkBox.setVisibility(View.VISIBLE);
-
         nameText.setText(item.getName());
-        priceText.setText("$" + item.getPrice());
+        priceText.setText(item.getPrice());
         statusText.setText(item.getStock() ? "In Stock" : "Out of Stock");
         statusText.setTextColor(item.getStock() ? Color.GREEN : Color.RED);
-        //itemList.get(position).setChecked((checkBox.isChecked()) ? true : false);
 
         return view;
     }
 
-    public void setVisibility_Checkbox(boolean invis_checkbox) {
-        this.invis_checkbox = invis_checkbox;
-    }
 }
