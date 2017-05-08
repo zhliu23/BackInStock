@@ -19,8 +19,6 @@ import com.example.zhen.backinstock.model.Item;
 
 import java.util.List;
 
-//import static com.example.zhen.backinstock.R.id.imageView;
-
 /**
  * Created by Zhen on 4/10/2017.
  */
@@ -81,8 +79,6 @@ public class ItemArrayAdapter extends ArrayAdapter<Item> {
         TextView nameText = (TextView) view.findViewById(R.id.nameText);
         TextView priceText = (TextView) view.findViewById(R.id.priceText);
         TextView statusText = (TextView) view.findViewById(R.id.statusText);
-
-        //ImageView imageView = (ImageView) view.findViewById(R.id.itemImage);
 
         Item item = itemList.get(position);
 

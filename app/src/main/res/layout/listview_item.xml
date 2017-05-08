@@ -14,19 +14,20 @@
         <!--android:layout_marginLeft="10dp"-->
         <!--android:focusable="false"/>-->
 
-    <ImageView
-        android:id="@+id/itemImage"
-        android:layout_weight="25"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:src="@drawable/ic_image_holder" />
+    <!--<ImageView-->
+        <!--android:id="@+id/itemImage"-->
+        <!--android:layout_weight="25"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:src="@drawable/ic_image_holder" />-->
 
     <LinearLayout
         android:layout_weight="75"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginRight="15dp">
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp">
 
         <TextView
             android:id="@+id/nameText"

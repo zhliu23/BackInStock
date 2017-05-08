@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private ItemsDB itemsDB;
 
     private ProgressDialog progressDialog;
+    private boolean browserRunning = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        if(!itemList.isEmpty())
+        if(!itemList.isEmpty() && !browserRunning)
             startService();
     }
 
@@ -78,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
             if(resultCode == Activity.RESULT_OK) {
                 String url = data.getStringExtra("URL");
                 new parseURL().execute(new String[] {url});
+                browserRunning = false;
             }
         }
     }
@@ -93,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, BrowserActivity.class);
                 startActivityForResult(intent, 1);
+                browserRunning = true;
             }
         });
     }
@@ -127,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
 
         AlarmManager alarm = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
         alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),
-                AlarmManager.INTERVAL_FIFTEEN_MINUTES, pIntent);
+                AlarmManager.INTERVAL_HALF_HOUR, pIntent);
     }
 
     /**

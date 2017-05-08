@@ -14,7 +14,6 @@ import java.util.ArrayList;
 
 public class NetworkScheduler extends BroadcastReceiver {
     public static final int REQUEST_CODE = 12345;
-    public static final String ACTION = "com.example.zhen.backinstock.controller.NetworkScheduler";
 
     @Override
     public void onReceive(Context context, Intent intent) {
