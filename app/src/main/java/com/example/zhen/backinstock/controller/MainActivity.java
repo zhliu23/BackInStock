@@ -55,20 +55,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        //IntentFilter filter = new IntentFilter(BackgroundService.ACTION);
-        //LocalBroadcastManager.getInstance(this).registerReceiver(receiver, filter);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        //LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        startService();
+        if(!itemList.isEmpty())
+            startService();
     }
 
     @Override
@@ -89,12 +87,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_refresh:
                 if(!itemList.isEmpty())
                     new updateItemInfo().execute(itemList);
-                Toast.makeText(this, "Refresh", Toast.LENGTH_SHORT).show();
                 return true;
-
-            case R.id.action_settings:
-                return true;
-
             default:
                 return true;
         }
@@ -154,24 +147,6 @@ public class MainActivity extends AppCompatActivity {
 
         if(!itemList.isEmpty())
             new updateItemInfo().execute(itemList);
-    }
-
-    /**
-     * Initialize the BroadcastReceiver
-     */
-    public void initReceiver() {
-        receiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                int resultCode = intent.getIntExtra("resultCode", RESULT_CANCELED);
-                if (resultCode == RESULT_OK) {
-                    itemList = intent.getParcelableArrayListExtra("ItemList");
-                    for(Item item : itemList)
-                        itemsDB.updateItem(item);
-                    Log.e("Receiver", "Finish updating.");
-                }
-            }
-        };
     }
 
     /**

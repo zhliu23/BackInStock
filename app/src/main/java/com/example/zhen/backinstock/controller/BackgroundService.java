@@ -41,6 +41,7 @@ public class BackgroundService extends IntentService {
         try {
             NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
             String msg = "Available now~!";
+            int numberInStock = 0;
             for(Item item : itemList) {
                 Document doc = Jsoup.connect(item.getUrl()).get();
 
@@ -51,29 +52,32 @@ public class BackgroundService extends IntentService {
                     Elements priceBlock = doc.select("#priceblock_ourprice");
                     if (priceBlock.text().equals(""))
                         priceBlock = doc.select("#priceblock_dealprice");
-                    if (!priceBlock.text().equals("")) {
+                    if (!priceBlock.text().equals(""))
                         msg += "\n" + doc.select("#productTitle").first().text();
-                    }
+                    numberInStock++;
                 }
             }
-            Notification notification = new Notification.Builder(this)
-                    .setContentTitle("Back in Stock:")
-                    .setContentText(msg)
-                    .setStyle(new Notification.BigTextStyle().bigText(msg))
-                    .setAutoCancel(true)
-                    .setSmallIcon(R.mipmap.ic_launcher)
-                    .setVibrate(new long[]{1000, 1000, 1000, 1000, 1000})
-                    .build();
-            notificationManager.notify(0, notification);
+
+            if(numberInStock > 0) {
+                Notification notification = new Notification.Builder(this)
+                        .setContentTitle("Back in Stock:")
+                        .setContentText(msg)
+                        .setStyle(new Notification.BigTextStyle().bigText(msg))
+                        .setAutoCancel(true)
+                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setVibrate(new long[]{1000, 1000, 1000, 1000, 1000})
+                        .build();
+                notificationManager.notify(0, notification);
+            }
         }
         catch(Throwable t) {
             Log.e("BackgroundService", "Items fail to update.");
         }
-        Intent result = new Intent(ACTION);
-
-        result.putExtra("resultCode", Activity.RESULT_OK);
-        result.putParcelableArrayListExtra("ItemList", itemList);
-        LocalBroadcastManager.getInstance(this).sendBroadcast(result);
+//        Intent result = new Intent(ACTION);
+//
+//        result.putExtra("resultCode", Activity.RESULT_OK);
+//        result.putParcelableArrayListExtra("ItemList", itemList);
+//        LocalBroadcastManager.getInstance(this).sendBroadcast(result);
 
     }
 

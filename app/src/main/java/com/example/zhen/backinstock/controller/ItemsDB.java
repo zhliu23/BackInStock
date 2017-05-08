@@ -70,19 +70,6 @@ public class ItemsDB extends SQLiteOpenHelper {
     }
 
     /**
-     * Updates the information of the passed item
-     * @param item
-     */
-    public int updateItem(Item item) {
-        Log.e("ItemDB", "Updating " + item.getName());
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(KEY_URL, item.getUrl());
-        return db.update(TABLE_ITEMS, values, KEY_URL + " = ?", new String[] {item.getUrl()});
-        //db.close();
-    }
-
-    /**
      * Returns an arraylist containing all saved URL
      * @return itemList
      */
