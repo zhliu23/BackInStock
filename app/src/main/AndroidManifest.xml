@@ -20,6 +20,13 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".controller.BrowserActivity">
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation">
+
+        </activity>
+
         <service
             android:name=".controller.BackgroundService"
             android:exported="false" />

@@ -1,24 +1,19 @@
 package com.example.zhen.backinstock.controller;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
+import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -41,7 +36,8 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Item> itemList;
     private ItemsDB itemsDB;
 
-    private BroadcastReceiver receiver;
+    private ProgressDialog progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,29 +45,13 @@ public class MainActivity extends AppCompatActivity {
 
         initButtons();
         initItemAdapter();
-        //initReceiver();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
         if(!itemList.isEmpty())
             startService();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
     }
 
     @Override
@@ -88,47 +68,31 @@ public class MainActivity extends AppCompatActivity {
                 if(!itemList.isEmpty())
                     new updateItemInfo().execute(itemList);
                 return true;
-            default:
-                return true;
+        }
+        return false;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == 1) {
+            if(resultCode == Activity.RESULT_OK) {
+                String url = data.getStringExtra("URL");
+                new parseURL().execute(new String[] {url});
+            }
         }
     }
 
     /**
-     * Initialize the buttons
+     * Initialize the floating action button
      */
     public void initButtons() {
-        //Floating Action Button
         addFAB = (FloatingActionButton) findViewById(R.id.addFAB);
         addFAB.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-
-                AlertDialog.Builder newEntryBuilder = new AlertDialog.Builder(MainActivity.this);
-                newEntryBuilder.setTitle("New Entry");
-
-                final EditText urlEditText = new EditText(MainActivity.this);
-                urlEditText.setInputType(InputType.TYPE_TEXT_VARIATION_URI);
-                urlEditText.setHint("Amazon URL");
-
-                newEntryBuilder.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        String url = urlEditText.getText().toString();
-                        if(!url.matches("") && url.startsWith("https://www.amazon.com/"))
-                            (new parseURL()).execute(new String[]{ url });
-                        else
-                            dialog.cancel();
-                    }
-                });
-                newEntryBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-                newEntryBuilder.setView(urlEditText);
-                newEntryBuilder.show();
+                Intent intent = new Intent(MainActivity.this, BrowserActivity.class);
+                startActivityForResult(intent, 1);
             }
         });
     }
@@ -145,8 +109,10 @@ public class MainActivity extends AppCompatActivity {
         itemAdapter = new ItemArrayAdapter(this, R.layout.listview_item, itemList, itemsDB);
         listView.setAdapter(itemAdapter);
 
-        if(!itemList.isEmpty())
+        if(!itemList.isEmpty()) {
+            progressDialog = ProgressDialog.show(this, "Loading", "Please wait...", true);
             new updateItemInfo().execute(itemList);
+        }
     }
 
     /**
@@ -159,9 +125,8 @@ public class MainActivity extends AppCompatActivity {
         final PendingIntent pIntent = PendingIntent.getBroadcast(this, NetworkScheduler.REQUEST_CODE,
                 intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        long firstMillis = System.currentTimeMillis();
         AlarmManager alarm = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
-        alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP, firstMillis,
+        alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),
                 AlarmManager.INTERVAL_FIFTEEN_MINUTES, pIntent);
     }
 
@@ -198,9 +163,8 @@ public class MainActivity extends AppCompatActivity {
                     if(priceBlock.text().equals("")) {
                         price = "Available from other sellers.";
                         inStock = false;
-                    }
-                    else {
-                        price = priceBlock.text().replaceAll("\\s+", "");
+                    } else {
+                        price = priceBlock.text().replaceAll("\\s+|\\.", "");
                         price = new StringBuilder(price).insert(price.length() - 2, ".").toString();
                     }
                 } else
@@ -222,11 +186,11 @@ public class MainActivity extends AppCompatActivity {
                 if(itemsDB.addItem(newItem))
                     itemAdapter.add(newItem);
                 else
-                    Toast.makeText(MainActivity.this, "Duplicate item.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Duplicate Item", Toast.LENGTH_SHORT).show();
                 itemAdapter.notifyDataSetChanged();
             }
             else
-                Toast.makeText(MainActivity.this, "Invalid link.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Invalid Link", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -265,7 +229,7 @@ public class MainActivity extends AppCompatActivity {
                             item.setStock(false);
                         }
                         else {
-                            price = priceBlock.text().replaceAll("\\s+", "");
+                            price = priceBlock.text().replaceAll("\\s+|\\.", "");
                             price = new StringBuilder(price).insert(price.length() - 2, ".").toString();
                         }
                     } else
@@ -282,7 +246,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            Log.e("UpdateList", "finished");
+            progressDialog.dismiss();
             if(s.equals("Pass"))
                 itemAdapter.notifyDataSetChanged();
         }

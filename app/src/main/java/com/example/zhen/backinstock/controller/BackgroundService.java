@@ -25,8 +25,6 @@ import java.util.ArrayList;
 
 public class BackgroundService extends IntentService {
 
-    public static final String ACTION = "com.example.zhen.backinstock.model.BackgroundService";
-
     public BackgroundService() {
         super("Background Network Service");
     }
@@ -52,9 +50,10 @@ public class BackgroundService extends IntentService {
                     Elements priceBlock = doc.select("#priceblock_ourprice");
                     if (priceBlock.text().equals(""))
                         priceBlock = doc.select("#priceblock_dealprice");
-                    if (!priceBlock.text().equals(""))
+                    if (!priceBlock.text().equals("")) {
                         msg += "\n" + doc.select("#productTitle").first().text();
-                    numberInStock++;
+                        numberInStock++;
+                    }
                 }
             }
 
@@ -73,12 +72,6 @@ public class BackgroundService extends IntentService {
         catch(Throwable t) {
             Log.e("BackgroundService", "Items fail to update.");
         }
-//        Intent result = new Intent(ACTION);
-//
-//        result.putExtra("resultCode", Activity.RESULT_OK);
-//        result.putParcelableArrayListExtra("ItemList", itemList);
-//        LocalBroadcastManager.getInstance(this).sendBroadcast(result);
-
     }
 
 }
