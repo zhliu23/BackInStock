@@ -3,6 +3,7 @@ package com.example.zhen.backinstock.controller;
 import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.util.Log;
 
@@ -29,9 +30,7 @@ public class BackgroundService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-
-        Log.e("BackgroundService", "Service running");
-
+        Log.e("BackgroundService", "Starting update");
         ArrayList<Item> itemList = intent.getParcelableArrayListExtra("ItemList");
 
         try {
@@ -56,13 +55,16 @@ public class BackgroundService extends IntentService {
             }
 
             if(numberInStock > 0) {
+                Intent notificationIntent = new Intent(this, MainActivity.class);
+                PendingIntent pIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
                 Notification notification = new Notification.Builder(this)
                         .setContentTitle("Back in Stock:")
                         .setContentText(msg)
                         .setStyle(new Notification.BigTextStyle().bigText(msg))
                         .setAutoCancel(true)
                         .setSmallIcon(R.mipmap.ic_launcher)
-                        .setVibrate(new long[]{1000, 1000, 1000, 1000, 1000})
+                        .setVibrate(new long[]{0, 1000, 1000, 1000, 1000})
+                        .setContentIntent(pIntent)
                         .build();
                 notificationManager.notify(0, notification);
             }

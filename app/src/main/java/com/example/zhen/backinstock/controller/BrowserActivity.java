@@ -53,6 +53,7 @@ public class BrowserActivity extends Activity {
                         Intent returnIntent = new Intent();
                         returnIntent.putExtra("URL", url);
                         setResult(Activity.RESULT_OK, returnIntent);
+                        browser.clearCache(true);
                         finish();
                         break;
                 }
@@ -69,6 +70,7 @@ public class BrowserActivity extends Activity {
     @Override
     public void onBackPressed() {
         if(browser.canGoBack()) {
+            browser.clearCache(true);
             browser.goBack();
         } else {
             super.onBackPressed();

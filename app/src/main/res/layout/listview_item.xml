@@ -4,22 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#DADFE8"
-    android:alpha=".98">
-
-    <!--<CheckBox-->
-        <!--android:id="@+id/checkBox"-->
-        <!--android:layout_weight="10"-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_marginLeft="10dp"-->
-        <!--android:focusable="false"/>-->
-
-    <!--<ImageView-->
-        <!--android:id="@+id/itemImage"-->
-        <!--android:layout_weight="25"-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:src="@drawable/ic_image_holder" />-->
+    android:alpha=".95"
+    android:layout_marginBottom="10dp">
 
     <LinearLayout
         android:layout_weight="75"
@@ -27,7 +13,8 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_marginRight="15dp"
-        android:layout_marginLeft="15dp">
+        android:layout_marginLeft="15dp"
+        >
 
         <TextView
             android:id="@+id/nameText"
@@ -35,9 +22,9 @@
             android:layout_height="wrap_content"
             android:text="Item name"
             android:textStyle="bold"
-            android:textSize="19dp"
+            android:textSize="20dp"
             android:singleLine="true"
-            android:layout_marginTop="3dp"/>
+            android:layout_marginTop="5dp" />
 
         <TextView
             android:id="@+id/priceText"

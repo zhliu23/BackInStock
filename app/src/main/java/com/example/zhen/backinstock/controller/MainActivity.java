@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -37,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private ItemsDB itemsDB;
 
     private ProgressDialog progressDialog;
-    private boolean browserRunning = false;
+    private boolean browserRunning = false; //to ensure service doesn't start when internal browser activity starts
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +53,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         if(!itemList.isEmpty() && !browserRunning)
-            startService();
+            runService(true);
+        else if(itemList.isEmpty() && !browserRunning)
+            runService(false);
+
     }
 
     @Override
@@ -68,7 +72,16 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_refresh:
                 if(!itemList.isEmpty())
                     new updateItemInfo().execute(itemList);
-                return true;
+                break;
+
+            case R.id.action_info:
+                new AlertDialog.Builder(this)
+                        .setTitle("About")
+                        .setMessage("1. Tab on item entry to open item in browser\n" +
+                                    "2. Hold on item entry to delete item.\n\n" +
+                                    "Currently supports:\nAmazon")
+                        .show();
+                break;
         }
         return false;
     }
@@ -93,9 +106,9 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
+                browserRunning = true;
                 Intent intent = new Intent(MainActivity.this, BrowserActivity.class);
                 startActivityForResult(intent, 1);
-                browserRunning = true;
             }
         });
     }
@@ -121,16 +134,16 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Initialize Intent, PendingIntent and AlarmManager to start up BackgroundService
      */
-    public void startService() {
-        Intent intent = new Intent(getApplicationContext(), NetworkScheduler.class);
+    public void runService(boolean start) {
+        Intent intent = new Intent(this, NetworkScheduler.class);
         intent.putParcelableArrayListExtra("ItemList", itemList);
-
-        final PendingIntent pIntent = PendingIntent.getBroadcast(this, NetworkScheduler.REQUEST_CODE,
+        PendingIntent pIntent = PendingIntent.getBroadcast(this, NetworkScheduler.REQUEST_CODE,
                 intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
         AlarmManager alarm = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
-        alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),
-                AlarmManager.INTERVAL_HALF_HOUR, pIntent);
+        if(start)
+            alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + AlarmManager.INTERVAL_FIFTEEN_MINUTES, AlarmManager.INTERVAL_FIFTEEN_MINUTES, pIntent);
+        else
+            alarm.cancel(pIntent);
     }
 
     /**
@@ -193,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
                 itemAdapter.notifyDataSetChanged();
             }
             else
-                Toast.makeText(MainActivity.this, "Invalid Link", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "This isn't a product", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -236,7 +249,7 @@ public class MainActivity extends AppCompatActivity {
                             price = new StringBuilder(price).insert(price.length() - 2, ".").toString();
                         }
                     } else
-                        price = "Available from other sellers.";
+                         price = "$0.00";
                     item.setPrice(price);
                 }
                 return "Pass";
