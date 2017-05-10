@@ -1,13 +1,12 @@
-package com.example.zhen.backinstock.controller;
+package com.zhenliu.backinstock.controller;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
-import com.example.zhen.backinstock.model.Item;
+import com.zhenliu.backinstock.model.Item;
 
 import java.util.ArrayList;
 

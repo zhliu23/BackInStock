@@ -1,4 +1,4 @@
-package com.example.zhen.backinstock.controller;
+package com.zhenliu.backinstock.controller;
 
 import android.app.Activity;
 import android.app.AlarmManager;
@@ -11,15 +11,14 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.example.zhen.backinstock.R;
-import com.example.zhen.backinstock.model.Item;
+import com.zhenliu.backinstock.R;
+import com.zhenliu.backinstock.model.Item;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

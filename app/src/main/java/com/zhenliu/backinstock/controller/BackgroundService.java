@@ -1,4 +1,4 @@
-package com.example.zhen.backinstock.controller;
+package com.zhenliu.backinstock.controller;
 
 import android.app.IntentService;
 import android.app.Notification;
@@ -7,8 +7,8 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.util.Log;
 
-import com.example.zhen.backinstock.R;
-import com.example.zhen.backinstock.model.Item;
+import com.zhenliu.backinstock.R;
+import com.zhenliu.backinstock.model.Item;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

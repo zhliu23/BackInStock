@@ -1,4 +1,4 @@
-package com.example.zhen.backinstock.model;
+package com.zhenliu.backinstock.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;

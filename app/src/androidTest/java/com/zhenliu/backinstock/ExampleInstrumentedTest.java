@@ -1,4 +1,4 @@
-package com.example.zhen.backinstock;
+package com.zhenliu.backinstock;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.example.zhen.backinstock", appContext.getPackageName());
+        assertEquals("com.liu.zhenliu.com.zhenliu.zhenliu.backinstock", appContext.getPackageName());
     }
 }

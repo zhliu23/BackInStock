@@ -1,10 +1,10 @@
-package com.example.zhen.backinstock.controller;
+package com.zhenliu.backinstock.controller;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.example.zhen.backinstock.model.Item;
+import com.zhenliu.backinstock.model.Item;
 
 import java.util.ArrayList;
 

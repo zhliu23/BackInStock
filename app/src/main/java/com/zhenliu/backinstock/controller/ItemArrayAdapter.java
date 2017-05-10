@@ -1,4 +1,4 @@
-package com.example.zhen.backinstock.controller;
+package com.zhenliu.backinstock.controller;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -13,11 +13,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.zhen.backinstock.R;
-import com.example.zhen.backinstock.model.Item;
+import com.zhenliu.backinstock.R;
+import com.zhenliu.backinstock.model.Item;
 
 import java.util.List;
 

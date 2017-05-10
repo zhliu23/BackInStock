@@ -1,4 +1,4 @@
-package com.example.zhen.backinstock;
+package com.zhenliu.backinstock;
 
 import org.junit.Test;
 

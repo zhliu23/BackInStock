@@ -1,4 +1,4 @@
-package com.example.zhen.backinstock.controller;
+package com.zhenliu.backinstock.controller;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -10,7 +10,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.example.zhen.backinstock.R;
+import com.zhenliu.backinstock.R;
 
 /**
  * Created by Zhen on 5/7/2017.

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.zhen.backinstock">
+    package="com.zhenliu.backinstock">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.GET_TASKS"/>
@@ -12,7 +12,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".controller.MainActivity"
+            android:name="com.zhenliu.backinstock.controller.MainActivity"
             android:screenOrientation="portrait"
             android:configChanges="keyboardHidden|orientation">
             <intent-filter>
@@ -22,18 +22,18 @@
         </activity>
 
         <activity
-            android:name=".controller.BrowserActivity">
+            android:name="com.zhenliu.backinstock.controller.BrowserActivity">
             android:screenOrientation="portrait"
             android:configChanges="keyboardHidden|orientation">
 
         </activity>
 
         <service
-            android:name=".controller.BackgroundService"
+            android:name="com.zhenliu.backinstock.controller.BackgroundService"
             android:exported="false" />
 
         <receiver
-            android:name=".controller.NetworkScheduler"
+            android:name="com.zhenliu.backinstock.controller.NetworkScheduler"
             android:process=":remote"/>
 
     </application>
