@@ -7,3 +7,5 @@ This app is very simple. Add the item you wish to monitor to the app using the a
 
 Supports:
 Currently it only supports Amazon products. Future updates will bring support for other sites.
+
+Google Play: https://play.google.com/store/apps/details?id=com.zhenliu.backinstock&hl=en
