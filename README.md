@@ -9,4 +9,3 @@ Supports:
 Currently it only supports Amazon products. Future updates will bring support for other sites.
 
 Google Play: https://play.google.com/store/apps/details?id=com.zhenliu.backinstock&hl=en
-Wix Website: https://zhenliu10.wixsite.com/backinstock
